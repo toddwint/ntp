@@ -24,7 +24,7 @@ docker run -dit --rm \
     -v ntp:/opt/ntp/ \
     -e TZ=$TZ \
     --cap-add=NET_ADMIN \
-    toddwint/ntp:0.01
+    toddwint/ntp
 ```
 
 ## Verify it is working
