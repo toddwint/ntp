@@ -2,7 +2,11 @@
 
 ## Info
 
-Simple NTP server for lab testing.
+<https://hub.docker.com/r/toddwint/ntp>
+
+<https://github.com/toddwint/ntp>
+
+NTP server for lab testing.
 
 This image was created for lab setups where there is a need to provide an NTP server and none is available.
 
@@ -10,7 +14,9 @@ This image was created for lab setups where there is a need to provide an NTP se
 
 ```
 TZ=UTC
-IPADDR=10.1.233.88
+IPADDR=127.0.0.1
+HTTPPORT=9001
+HOSTNAME=ntpsrvr
 ```
 
 ## Sample docker run command
@@ -18,38 +24,32 @@ IPADDR=10.1.233.88
 ```
 #!/usr/bin/env bash
 source config.txt
+cp template/webadmin.html.template webadmin.html
+sed -i "s/IPADDR/$IPADDR:$HTTPPORT/g" webadmin.html
 docker run -dit --rm \
     --name ntp \
+    -h $HOSTNAME \
     -p $IPADDR:123:123/udp \
-    -v ntp:/opt/ntp/ \
+    -p $IPADDR:$HTTPPORT:$HTTPPORT \
+    -v ntp:/var/log/ntpstats/ \
     -e TZ=$TZ \
+    -e HTTPPORT=$HTTPPORT \
+    -e HOSTNAME=$HOSTNAME \
     --cap-add=NET_ADMIN \
     toddwint/ntp
 ```
 
-## Verify it is working
+## Sample webadmin.html.template file
 
-### From the docker container
-
-```
-ss -ln
-```
-
-Verify you see a service listening on port 123
-
-- - -
-
-```
-service ntp status
-```
-
-Verify the service has started
+See my github page (referenced above).
 
 
-### From a linux client
+## Login page
 
-First make sure you have ntpdate installed.  If not install it `sudo apt-get install ntpdate`
+Open the `webadmin.html` file.
 
-```
-ntpdate -q <ip of container>
-```
+Or just type in your browser `http://<ip_address>:<port>`
+
+## Issues?
+
+Make sure if you set an IP that machine has the same IP configured on an interface.
