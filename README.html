@@ -159,6 +159,18 @@
 <p><a href="https://github.com/toddwint/ntp" class="uri">https://github.com/toddwint/ntp</a></p>
 <p>NTP server for lab testing.</p>
 <p>This image was created for lab setups where there is a need to provide an NTP server and none is available.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li>Host an NTP server for clients.</li>
+<li>View NTP messages in a web browser (<a href="https://github.com/mthenw/frontail">frontail</a>)
+<ul>
+<li>tail the file</li>
+<li>pause the flow</li>
+<li>search through the flow</li>
+<li>highlight multiple rows</li>
+</ul></li>
+<li>NTP log messages are persistent if you map the directory <code>/var/log/ntpstats</code></li>
+</ul>
 <h2 id="sample-config.txt-file">Sample <code>config.txt</code> file</h2>
 <pre><code>TZ=UTC
 IPADDR=127.0.0.1

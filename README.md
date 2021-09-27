@@ -10,6 +10,16 @@ NTP server for lab testing.
 
 This image was created for lab setups where there is a need to provide an NTP server and none is available.
 
+## Features
+
+- Host an NTP server for clients.
+- View NTP messages in a web browser ([frontail](https://github.com/mthenw/frontail))
+    - tail the file
+    - pause the flow
+    - search through the flow
+    - highlight multiple rows
+- NTP log messages are persistent if you map the directory `/var/log/ntpstats`
+
 ## Sample `config.txt` file
 
 ```
