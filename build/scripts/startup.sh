@@ -12,6 +12,7 @@ sed -ri '/filegen clockstats file clockstats type day enable/a filegen sysstats 
 sed -ri '/filegen clockstats file clockstats type day enable/a filegen rawstats file rawstats type day enable' /etc/ntp.conf
 sed -ri '/# Use servers from the NTP Pool Project/,/pool ntp.ubuntu.com/d' /etc/ntp.conf
 sed -ri '/# Specify one or more NTP servers./a server 127.127.1.0 prefer' /etc/ntp.conf
+sed -ri '/server 127.127.1.0 prefer/a fudge 127.127.1.0 stratum 0' /etc/ntp.conf
 
 service ntp stop
 service ntp start
