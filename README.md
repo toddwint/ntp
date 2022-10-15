@@ -4,6 +4,10 @@
 
 `ntp` docker image for simple lab testing applications.
 
+Docker Hub: <https://hub.docker.com/r/toddwint/ntp>
+
+GitHub: <https://github.com/toddwint/ntp>
+
 
 ## Features
 
