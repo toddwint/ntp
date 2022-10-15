@@ -1,29 +1,27 @@
-FROM ubuntu:focal
+FROM toddwint/mybaseimage
 COPY scripts /opt/ntp/scripts
-EXPOSE 123/udp 9001
 ENV DEBIAN_FRONTEND=noninteractive \
     TZ=UTC \
-    HTTPPORT=9001 \
-    HOSTNAME=ntpsrvr
+    HTTPPORT1=8080 \
+    HTTPPORT2=8081 \
+    HTTPPORT3=8082 \
+    HTTPPORT4=8083 \
+    HOSTNAME=ntpsrvr \
+    APPNAME=ntp
 RUN apt-get update \
     && \
     apt-get install -y \
-    tzdata \
-    iproute2 \
-    wget \
     ntp \
+    rsyslog \
     && \
     echo $HOSTNAME > /etc/hostname \
     && \
-    wget -q https://github.com/mthenw/frontail/releases/download/v4.9.1/frontail-linux -O /usr/local/bin/frontail \
+    cd /opt \
     && \
-    chmod 755 /usr/local/bin/frontail \
-    && \
-    apt-get remove -y \
-    wget \
+    rm -rf /opt/mybaseimage \
     && \
     apt-get autoremove -y \
     && \
     rm -rf /var/lib/apt/lists/*
-WORKDIR /opt/ntp/
+WORKDIR /opt/ntp/scripts
 CMD ["/opt/ntp/scripts/startup.sh"]
