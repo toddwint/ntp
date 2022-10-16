@@ -156,6 +156,8 @@
 <h1 id="toddwintntp">toddwint/ntp</h1>
 <h2 id="info">Info</h2>
 <p><code>ntp</code> docker image for simple lab testing applications.</p>
+<p>Docker Hub: <a href="https://hub.docker.com/r/toddwint/ntp" class="uri">https://hub.docker.com/r/toddwint/ntp</a></p>
+<p>GitHub: <a href="https://github.com/toddwint/ntp" class="uri">https://github.com/toddwint/ntp</a></p>
 <h2 id="features">Features</h2>
 <ul>
 <li>Ubuntu base image</li>
@@ -205,7 +207,6 @@ source &quot;$(dirname &quot;$(realpath $0)&quot;)&quot;/config.txt
 docker run -dit \
     --name &quot;$HOSTNAME&quot; \
     -h &quot;$HOSTNAME&quot; \
-    -v &quot;$HOSTNAME&quot;:/opt/&quot;$APPNAME&quot;/logs \
     -p &quot;$IPADDR&quot;:123:123/udp \
     -p &quot;$IPADDR&quot;:&quot;$HTTPPORT1&quot;:&quot;$HTTPPORT1&quot; \
     -p &quot;$IPADDR&quot;:&quot;$HTTPPORT2&quot;:&quot;$HTTPPORT2&quot; \
