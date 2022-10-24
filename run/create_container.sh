@@ -3,6 +3,15 @@ REPO=toddwint
 APPNAME=ntp
 source "$(dirname "$(realpath $0)")"/config.txt
 
+# Set the IP on the interface
+IPASSIGNED=$(ip addr show $INTERFACE | grep $IPADDR)
+if [ -z "$IPASSIGNED" ]; then
+   SETIP="$IPADDR/$(echo $SUBNET | awk -F/ '{print $2}')" 
+   sudo ip addr add $SETIP dev $INTERFACE
+else
+    echo 'IP is already assigned to the interface'
+fi
+
 # Create the docker container
 docker run -dit \
     --name "$HOSTNAME" \

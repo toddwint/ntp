@@ -190,18 +190,41 @@
 </ul></li>
 </ul>
 <h2 id="sample-config.txt-file">Sample <code>config.txt</code> file</h2>
-<pre><code>TZ=UTC
-IPADDR=127.0.0.1
+<pre><code># To get a list of timezones view the files in `/usr/share/zoneinfo`
+TZ=UTC
+
+# The interface on which to set the IP. Run `ip -br a` to see a list
+INTERFACE=eth0
+
+# The IP address that will be set on the host and NAT&#39;d to the container
+IPADDR=192.168.10.1
+
+# The IP subnet in the form subnet/cidr
+SUBNET=192.168.10.0/24
+
+# The ports for web management access of the docker container.
+# ttyd tail, ttyd tmux, frontail, and tmux respectively
 HTTPPORT1=8080
 HTTPPORT2=8081
 HTTPPORT3=8082
 HTTPPORT4=8083
-HOSTNAME=ntpsrvr01</code></pre>
+
+# The hostname of the instance of the docker container
+HOSTNAME=ntp01</code></pre>
 <h2 id="sample-docker-run-script">Sample docker run script</h2>
 <pre><code>#!/usr/bin/env bash
 REPO=toddwint
 APPNAME=ntp
 source &quot;$(dirname &quot;$(realpath $0)&quot;)&quot;/config.txt
+
+# Set the IP on the interface
+IPASSIGNED=$(ip addr show $INTERFACE | grep $IPADDR)
+if [ -z &quot;$IPASSIGNED&quot; ]; then
+   SETIP=&quot;$IPADDR/$(echo $SUBNET | awk -F/ &#39;{print $2}&#39;)&quot; 
+   sudo ip addr add $SETIP dev $INTERFACE
+else
+    echo &#39;IP is already assigned to the interface&#39;
+fi
 
 # Create the docker container
 docker run -dit \
@@ -231,7 +254,5 @@ docker run -dit \
 <li><code>http://&lt;ip_address&gt;:&lt;port4&gt;</code></li>
 </ul></li>
 </ul>
-<h2 id="issues">Issues?</h2>
-<p>Make sure to set the IP on the host and that the ports being used are not currently being used by the host.</p>
 </body>
 </html>

@@ -36,13 +36,27 @@ GitHub: <https://github.com/toddwint/ntp>
 ## Sample `config.txt` file
 
 ```
+# To get a list of timezones view the files in `/usr/share/zoneinfo`
 TZ=UTC
-IPADDR=127.0.0.1
+
+# The interface on which to set the IP. Run `ip -br a` to see a list
+INTERFACE=eth0
+
+# The IP address that will be set on the host and NAT'd to the container
+IPADDR=192.168.10.1
+
+# The IP subnet in the form subnet/cidr
+SUBNET=192.168.10.0/24
+
+# The ports for web management access of the docker container.
+# ttyd tail, ttyd tmux, frontail, and tmux respectively
 HTTPPORT1=8080
 HTTPPORT2=8081
 HTTPPORT3=8082
 HTTPPORT4=8083
-HOSTNAME=ntpsrvr01
+
+# The hostname of the instance of the docker container
+HOSTNAME=ntp01
 ```
 
 
@@ -53,6 +67,15 @@ HOSTNAME=ntpsrvr01
 REPO=toddwint
 APPNAME=ntp
 source "$(dirname "$(realpath $0)")"/config.txt
+
+# Set the IP on the interface
+IPASSIGNED=$(ip addr show $INTERFACE | grep $IPADDR)
+if [ -z "$IPASSIGNED" ]; then
+   SETIP="$IPADDR/$(echo $SUBNET | awk -F/ '{print $2}')" 
+   sudo ip addr add $SETIP dev $INTERFACE
+else
+    echo 'IP is already assigned to the interface'
+fi
 
 # Create the docker container
 docker run -dit \
@@ -83,8 +106,3 @@ Open the `webadmin.html` file.
   - `http://<ip_address>:<port2>` or
   - `http://<ip_address>:<port3>`
   - `http://<ip_address>:<port4>`
-
-
-## Issues?
-
-Make sure to set the IP on the host and that the ports being used are not currently being used by the host.
