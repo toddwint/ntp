@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 SCRIPTDIR="$(dirname "$(realpath "$0")")"
 source "$SCRIPTDIR"/config.txt
+set -x
 
-docker start "$HOSTNAME"
+docker exec -it "$HOSTNAME" bash

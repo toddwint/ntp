@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 REPO=toddwint
 APPNAME=ntp
-source "$(dirname "$(realpath $0)")"/config.txt
+SCRIPTDIR="$(dirname "$(realpath "$0")")"
+source "$SCRIPTDIR"/config.txt
 
 # Set the IP on the interface
 IPASSIGNED=$(ip addr show $INTERFACE | grep $IPADDR)
@@ -11,6 +12,10 @@ if [ -z "$IPASSIGNED" ]; then
 else
     echo 'IP is already assigned to the interface'
 fi
+
+# Add remote network routes
+IFS=',' # Internal Field Separator
+for ROUTE in $ROUTES; do sudo ip route add "$ROUTE" via "$GATEWAY"; done
 
 # Create the docker container
 docker run -dit \
@@ -31,8 +36,8 @@ docker run -dit \
     ${REPO}/${APPNAME}
 
 # Create the webadmin html file from template
-htmltemplate="$(dirname "$(realpath $0)")"/webadmin.html.template
-htmlfile="$(dirname "$(realpath $0)")"/webadmin.html
+htmltemplate="$SCRIPTDIR"/webadmin.html.template
+htmlfile="$SCRIPTDIR"/webadmin.html
 cp "$htmltemplate" "$htmlfile"
 sed -Ei 's/(Launch page for webadmin)/\1 - '"$HOSTNAME"'/g' "$htmlfile"
 sed -Ei 's/\bIPADDR:HTTPPORT1\b/'"$IPADDR"':'"$HTTPPORT1"'/g' "$htmlfile"

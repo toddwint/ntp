@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
-source "$(dirname "$(realpath $0)")"/config.txt
+SCRIPTDIR="$(dirname "$(realpath "$0")")"
+source "${SCRIPTDIR}"/config.txt
+
+# Stop and remove the container
 docker container stop "$HOSTNAME"
 docker container rm "$HOSTNAME"
+
+# Remove the IP on the interface
 IPASSIGNED=$(ip addr show $INTERFACE | grep $IPADDR)
 if [ -n "$IPASSIGNED" ]; then
    SETIP="$IPADDR/$(echo $SUBNET | awk -F/ '{print $2}')" 
@@ -9,5 +14,10 @@ if [ -n "$IPASSIGNED" ]; then
 else
     echo 'IP is not assigned to the interface'
 fi
-htmlfile="$(dirname "$(realpath $0)")"/webadmin.html
-rm -rf "$htmlfile"
+
+# Delete remote network routes
+IFS=',' # Internal Field Separator
+for ROUTE in $ROUTES; do sudo ip route del "$ROUTE" via "$GATEWAY"; done
+
+# Remove the webadmin.html customized file
+rm -rf "$SCRIPTDIR"/webadmin.html

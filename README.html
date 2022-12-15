@@ -202,6 +202,14 @@ IPADDR=192.168.10.1
 # The IP subnet in the form subnet/cidr
 SUBNET=192.168.10.0/24
 
+# The IP of the gateway
+GATEWAY=192.168.10.254
+
+# Add any custom routes needed in the form NETWORK/PREFIX
+# Separate multiple routes with a comma
+# Example: 10.0.0.0/8,192.168.0.0/16
+ROUTES=0.0.0.0/0
+
 # The ports for web management access of the docker container.
 # ttyd tail, ttyd tmux, frontail, and tmux respectively
 HTTPPORT1=8080
@@ -215,7 +223,8 @@ HOSTNAME=ntp01</code></pre>
 <pre><code>#!/usr/bin/env bash
 REPO=toddwint
 APPNAME=ntp
-source &quot;$(dirname &quot;$(realpath $0)&quot;)&quot;/config.txt
+SCRIPTDIR=&quot;$(dirname &quot;$(realpath &quot;$0&quot;)&quot;)&quot;
+source &quot;$SCRIPTDIR&quot;/config.txt
 
 # Set the IP on the interface
 IPASSIGNED=$(ip addr show $INTERFACE | grep $IPADDR)
@@ -225,6 +234,10 @@ if [ -z &quot;$IPASSIGNED&quot; ]; then
 else
     echo &#39;IP is already assigned to the interface&#39;
 fi
+
+# Add remote network routes
+IFS=&#39;,&#39; # Internal Field Separator
+for ROUTE in $ROUTES; do sudo ip route add &quot;$ROUTE&quot; via &quot;$GATEWAY&quot;; done
 
 # Create the docker container
 docker run -dit \

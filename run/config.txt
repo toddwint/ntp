@@ -10,6 +10,14 @@ IPADDR=192.168.10.1
 # The IP subnet in the form subnet/cidr
 SUBNET=192.168.10.0/24
 
+# The IP of the gateway
+GATEWAY=192.168.10.254
+
+# Add any custom routes needed in the form NETWORK/PREFIX
+# Separate multiple routes with a comma
+# Example: 10.0.0.0/8,192.168.0.0/16
+ROUTES=0.0.0.0/0
+
 # The ports for web management access of the docker container.
 # ttyd tail, ttyd tmux, frontail, and tmux respectively
 HTTPPORT1=8080

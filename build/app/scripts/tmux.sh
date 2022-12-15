@@ -30,11 +30,11 @@ else
     tmux split-window -v -p 80
     tmux split-window -v -p 80
     tmux split-window -v -p 80
-    tmux send-keys -t 1 "tail -n 500 -F /opt/"$APPNAME"/logs/ntpstats/rawstats" Enter
-    tmux send-keys -t 2 "tail -n 500 -F /opt/"$APPNAME"/logs/ntpstats/peerstats" Enter
-    tmux send-keys -t 3 "tail -n 500 -F /opt/"$APPNAME"/logs/ntpstats/loopstats" Enter
-    tmux send-keys -t 4 "tail -n 500 -F /opt/"$APPNAME"/logs/ntpstats/clockstats" Enter
-    tmux send-keys -t 5 "tail -n 500 -F /opt/"$APPNAME"/logs/ntpstats/sysstats" Enter
+    tmux send-keys -t 1 "tail -n 500 -F /opt/$APPNAME/logs/ntpstats/rawstats" Enter
+    tmux send-keys -t 2 "tail -n 500 -F /opt/$APPNAME/logs/ntpstats/peerstats" Enter
+    tmux send-keys -t 3 "tail -n 500 -F /opt/$APPNAME/logs/ntpstats/loopstats" Enter
+    tmux send-keys -t 4 "tail -n 500 -F /opt/$APPNAME/logs/ntpstats/clockstats" Enter
+    tmux send-keys -t 5 "tail -n 500 -F /opt/$APPNAME/logs/ntpstats/sysstats" Enter
     tmux select-layout even-vertical
     tmux select-window -t 1
     #tmux selectp -t 1 -d #disable user input in pane
