@@ -9,6 +9,14 @@ Docker Hub: <https://hub.docker.com/r/toddwint/ntp>
 GitHub: <https://github.com/toddwint/ntp>
 
 
+## Overview
+
+- Download the docker image and github files.
+- Configure the settings in `run/config.txt`.
+- Start a new container by running `run/create_container.sh`.
+- Open the file webadmin.html to view messages in a web browser.
+
+
 ## Features
 
 - Ubuntu base image
