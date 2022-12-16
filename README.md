@@ -14,7 +14,7 @@ GitHub: <https://github.com/toddwint/ntp>
 - Download the docker image and github files.
 - Configure the settings in `run/config.txt`.
 - Start a new container by running `run/create_container.sh`.
-- Configure device to use the docker IP as their ntp server.
+- Configure devices to use the docker IP as their ntp server.
 - Open the file webadmin.html to view messages in a web browser.
 
 
@@ -54,7 +54,7 @@ INTERFACE=eth0
 # The IP address that will be set on the host and NAT'd to the container
 IPADDR=192.168.10.1
 
-# The IP subnet in the form subnet/cidr
+# The IP subnet in the form NETWORK/PREFIX
 SUBNET=192.168.10.0/24
 
 # The IP of the gateway
