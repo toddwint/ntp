@@ -36,6 +36,7 @@ else
     tmux send-keys -t 4 "tail -n 500 -F /opt/$APPNAME/logs/ntpstats/clockstats" Enter
     tmux send-keys -t 5 "tail -n 500 -F /opt/$APPNAME/logs/ntpstats/sysstats" Enter
     tmux select-layout even-vertical
+    tmux new-window
     tmux select-window -t 1
     #tmux selectp -t 1 -d #disable user input in pane
     #tmux selectp -t 1 -e #enable user input in pane
