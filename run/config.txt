@@ -4,19 +4,18 @@ TZ=UTC
 # The interface on which to set the IP. Run `ip -br a` to see a list
 INTERFACE=eth0
 
-# The IP address that will be set on the host and NAT'd to the container
+# The IP address that will be set on the docker container
 IPADDR=192.168.10.1
+
+# The IP address that will be set on the host to manage the docker container
+MGMTIP=192.168.10.2
 
 # The IP subnet in the form NETWORK/PREFIX
 SUBNET=192.168.10.0/24
 
-# The IP of the gateway
+# The IP of the gateway. 
+# Don't leave blank. Enter a valid ip from the subnet range
 GATEWAY=192.168.10.254
-
-# Add any custom routes needed in the form NETWORK/PREFIX
-# Separate multiple routes with a comma
-# Example: 10.0.0.0/8,192.168.0.0/16
-ROUTES=0.0.0.0/0
 
 # The ports for web management access of the docker container.
 # ttyd tail, ttyd tmux, frontail, and tmux respectively

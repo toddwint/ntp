@@ -176,6 +176,7 @@
 <li>tmux</li>
 <li>python3-minimal</li>
 <li>iproute2</li>
+<li>iputils-ping</li>
 <li>tzdata</li>
 <li><a href="https://github.com/tsl0922/ttyd">ttyd</a>
 <ul>
@@ -204,19 +205,18 @@ TZ=UTC
 # The interface on which to set the IP. Run `ip -br a` to see a list
 INTERFACE=eth0
 
-# The IP address that will be set on the host and NAT&#39;d to the container
+# The IP address that will be set on the docker container
 IPADDR=192.168.10.1
+
+# The IP address that will be set on the host to manage the docker container
+MGMTIP=192.168.10.2
 
 # The IP subnet in the form NETWORK/PREFIX
 SUBNET=192.168.10.0/24
 
-# The IP of the gateway
+# The IP of the gateway. 
+# Don&#39;t leave blank. Enter a valid ip from the subnet range
 GATEWAY=192.168.10.254
-
-# Add any custom routes needed in the form NETWORK/PREFIX
-# Separate multiple routes with a comma
-# Example: 10.0.0.0/8,192.168.0.0/16
-ROUTES=0.0.0.0/0
 
 # The ports for web management access of the docker container.
 # ttyd tail, ttyd tmux, frontail, and tmux respectively
@@ -234,22 +234,21 @@ APPNAME=ntp
 SCRIPTDIR=&quot;$(dirname &quot;$(realpath &quot;$0&quot;)&quot;)&quot;
 source &quot;$SCRIPTDIR&quot;/config.txt
 
-# Set the IP on the interface
-IPASSIGNED=$(ip addr show $INTERFACE | grep $IPADDR)
-if [ -z &quot;$IPASSIGNED&quot; ]; then
-   SETIP=&quot;$IPADDR/$(echo $SUBNET | awk -F/ &#39;{print $2}&#39;)&quot; 
-   sudo ip addr add $SETIP dev $INTERFACE
-else
-    echo &#39;IP is already assigned to the interface&#39;
-fi
-
-# Add remote network routes
-IFS=&#39;,&#39; # Internal Field Separator
-for ROUTE in $ROUTES; do sudo ip route add &quot;$ROUTE&quot; via &quot;$GATEWAY&quot;; done
+# Make the macvlan needed to listen on ports
+# Set the IP on the host and add a route to the container
+docker network create -d macvlan --subnet=&quot;$SUBNET&quot; --gateway=&quot;$GATEWAY&quot; \
+  --aux-address=&quot;mgmt_ip=$MGMTIP&quot; -o parent=&quot;$INTERFACE&quot; \
+  &quot;$HOSTNAME&quot;
+sudo ip link add &quot;$HOSTNAME&quot; link &quot;$INTERFACE&quot; type macvlan mode bridge
+sudo ip addr add &quot;$MGMTIP&quot;/32 dev &quot;$HOSTNAME&quot;
+sudo ip link set &quot;$HOSTNAME&quot; up
+sudo ip route add &quot;$IPADDR&quot;/32 dev &quot;$HOSTNAME&quot;
 
 # Create the docker container
 docker run -dit \
     --name &quot;$HOSTNAME&quot; \
+    --network &quot;$HOSTNAME&quot; \
+    --ip &quot;$IPADDR&quot; \
     -h &quot;$HOSTNAME&quot; \
     -p &quot;$IPADDR&quot;:123:123/udp \
     -p &quot;$IPADDR&quot;:&quot;$HTTPPORT1&quot;:&quot;$HTTPPORT1&quot; \
@@ -257,12 +256,15 @@ docker run -dit \
     -p &quot;$IPADDR&quot;:&quot;$HTTPPORT3&quot;:&quot;$HTTPPORT3&quot; \
     -p &quot;$IPADDR&quot;:&quot;$HTTPPORT4&quot;:&quot;$HTTPPORT4&quot; \
     -e TZ=&quot;$TZ&quot; \
+    -e MGMTIP=&quot;$MGMTIP&quot; \
+    -e GATEWAY=&quot;$GATEWAY&quot; \
     -e HTTPPORT1=&quot;$HTTPPORT1&quot; \
     -e HTTPPORT2=&quot;$HTTPPORT2&quot; \
     -e HTTPPORT3=&quot;$HTTPPORT3&quot; \
     -e HTTPPORT4=&quot;$HTTPPORT4&quot; \
     -e HOSTNAME=&quot;$HOSTNAME&quot; \
     -e APPNAME=&quot;$APPNAME&quot; \
+    --cap-add=NET_ADMIN \
     ${REPO}/${APPNAME}</code></pre>
 <h2 id="login-page">Login page</h2>
 <p>Open the <code>webadmin.html</code> file.</p>
