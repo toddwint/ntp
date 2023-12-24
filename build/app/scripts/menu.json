@@ -1,0 +1,118 @@
+[
+ [
+  "Launch tmux",
+  "/opt/ntp/scripts/tmux.sh"
+ ],
+ [
+  "Search logs",
+  [
+   [
+    "ntp log (syslog)",
+    "tail -F -n +1 /opt/ntp/logs/ntp.log | fzf --tac --no-sort"
+   ],
+   [
+    "rawstats",
+    "tail -F -n +1 /opt/ntp/logs/ntpstats/rawstats | fzf --tac --no-sort"
+   ],
+   [
+    "peerstats",
+    "tail -F -n +1 /opt/ntp/logs/ntpstats/peerstats | fzf --tac --no-sort"
+   ],
+   [
+    "loopstats",
+    "tail -F -n +1 /opt/ntp/logs/ntpstats/loopstats | fzf --tac --no-sort"
+   ],
+   [
+    "sysstats",
+    "tail -F -n +1 /opt/ntp/logs/ntpstats/sysstats | fzf --tac --no-sort"
+   ],
+   [
+    "clockstats",
+    "tail -F -n +1 /opt/ntp/logs/ntpstats/clockstats | fzf --tac --no-sort"
+   ]
+  ]
+ ],
+ [
+  "View logs",
+  [
+   [
+    "ntp log (syslog)",
+    "more /opt/ntp/logs/ntp.log"
+   ],
+   [
+    "rawstats",
+    "more /opt/ntp/logs/ntpstats/rawstats"
+   ],
+   [
+    "peerstats",
+    "more /opt/ntp/logs/ntpstats/peerstats"
+   ],
+   [
+    "loopstats",
+    "more /opt/ntp/logs/ntpstats/loopstats"
+   ],
+   [
+    "sysstats",
+    "more /opt/ntp/logs/ntpstats/sysstats"
+   ],
+   [
+    "clockstats",
+    "more /opt/ntp/logs/ntpstats/clockstats"
+   ]
+  ]
+ ],
+ [
+  "View configuration",
+  [
+   [
+    "ntp configuration",
+    "more /etc/ntp.conf"
+   ],
+   [
+    "IP addresses",
+    "ip addr show | more"
+   ],
+   [
+    "Routing table",
+    "ip route show | more"
+   ],
+   [
+    "ARP or NDISC cache",
+    "ip neighbor show | more"
+   ],
+   [
+    "Network devices",
+    "ip link show | more"
+   ]
+  ]
+ ],
+ [
+  "Debug scripts",
+  [
+   [
+    "Show processes",
+    "ps ax | more"
+   ],
+   [
+    "Show sockets",
+    "ss --all --numeric --processes | more"
+   ],
+   [
+    "ttyd1 log",
+    "more /opt/ntp/logs/ttyd1.log"
+   ],
+   [
+    "ttyd2 log",
+    "more /opt/ntp/logs/ttyd2.log"
+   ],
+   [
+    "frontail log",
+    "more /opt/ntp/logs/frontail.log"
+   ],
+   [
+    "tailon log",
+    "more /opt/ntp/logs/tailon.log"
+   ]
+  ]
+ ]
+]
