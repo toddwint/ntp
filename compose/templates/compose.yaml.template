@@ -2,7 +2,7 @@ name: ${HOSTNAME}
 
 services:
   ntp:
-    image: toddwint/ntp
+    image: toddwint/${APPNAME}
     hostname: ${HOSTNAME}
     ports:
         - "${IPADDR}:123:123/udp"
